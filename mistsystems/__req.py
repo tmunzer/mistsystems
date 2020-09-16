@@ -12,7 +12,7 @@ class Req:
         self.host = ""
         self.session = requests.session()
         self.privileges = ""
-        
+
 
     def _url(self, uri):
         """Generate the url with the host (in the object) and the uri
@@ -25,10 +25,10 @@ class Req:
         if resp.status_code == 200:
             if multi_pages_result == None:
                 result = resp.json()
-            else: 
+            else:
                 result = multi_pages_result
             error = ""
-            logging.debug("Response Status Code: {}0".format(resp.status_code))
+            logging.debug("Response Status Code: {0}".format(resp.status_code))
         else:
             result = ""
             error = resp.json()
@@ -38,7 +38,7 @@ class Req:
 
     def mist_get(self, uri, query={}, page=None, limit=None):
         """GET HTTP Request
-        Params: 
+        Params:
             uri: String (ex: /api/v1/self)
             query: Dict (HTTP Query)
             page: Int (pagination page)
@@ -61,7 +61,7 @@ class Req:
             logging.error(f'HTTP error description: {resp.json()}')
         except Exception as err:
             logging.error(f'Other error occurred: {err}')  # Python 3.6
-        else: 
+        else:
             if "X-Page-Limit" in resp.headers:
                 content = resp.json()
                 x_page_limit = int(resp.headers["X-Page-Limit"])
@@ -70,16 +70,16 @@ class Req:
                 if x_page_limit * x_page_page < x_page_total:
                     content+=self.mist_get(uri, query, page + 1, limit)["result"]
                 return self._response(resp, uri, content)
-            else:                
+            else:
                 return self._response(resp, uri)
 
     def mist_post(self, uri, body={}):
         """POST HTTP Request
-        Params: 
+        Params:
             uri: String (ex: /api/v1/self)
             body: Dict (HTTP Body)
         Return: HTTP response"""
-        try: 
+        try:
             url = self._url(uri)
             headers = {'Content-Type': "application/json"}
             logging.debug("Request > POST {0}".format(url))
@@ -88,7 +88,7 @@ class Req:
                 resp = self.session.post(url, data=body, headers=headers)
             elif type(body) == dict:
                 resp = self.session.post(url, json=body, headers=headers)
-            else: 
+            else:
                 resp = self.session.post(url, json=body, headers=headers)
             resp.raise_for_status()
         except HTTPError as http_err:
@@ -96,12 +96,12 @@ class Req:
             logging.error(f'HTTP error description: {resp.json()}')
         except Exception as err:
             logging.error(f'Other error occurred: {err}')  # Python 3.6
-        else: 
+        else:
             return self._response(resp, uri)
 
     def mist_put(self, uri, body={}):
         """PUT HTTP Request
-        Params: 
+        Params:
             uri: String (ex: /api/v1/self)
             body: Dict (HTTP Body)
         Return: HTTP response"""
@@ -113,7 +113,7 @@ class Req:
                 resp = self.session.put(url, data=body)
             elif type(body) == dict:
                 resp = self.session.put(url, json=body)
-            else: 
+            else:
                 resp = self.session.put(url, json=body)
             resp.raise_for_status()
         except HTTPError as http_err:
@@ -121,16 +121,16 @@ class Req:
             logging.error(f'HTTP error description: {resp.json()}')
         except Exception as err:
             logging.error(f'Other error occurred: {err}')  # Python 3.6
-        else: 
+        else:
             return self._response(resp, uri)
 
 
     def mist_delete(self, uri):
         """DELETE HTTP Request
-        Params: 
+        Params:
             uri: String (ex: /api/v1/self)
         Return: HTTP response"""
-        try: 
+        try:
             url = self._url(uri)
             logging.debug("Request > DELETE {0}".format(url))
             resp = self.session.delete(url)
@@ -139,17 +139,17 @@ class Req:
             logging.error(f'HTTP error occurred: {http_err}')  # Python 3.6
         except Exception as err:
             logging.error(f'Other error occurred: {err}')  # Python 3.6
-        else: 
+        else:
             return self._response(resp, uri)
 
 
     def mist_post_file(self, uri, files=None):
         """POST HTTP Request with file
-        Params: 
+        Params:
             uri: String (ex: /api/v1/self)
             files: String (path to the files)
         Return: HTTP response"""
-        try:                 
+        try:
             url = self._url(uri)
             logging.debug("Request > POST {0}".format(url))
             resp = self.session.post(url, files=files)
@@ -160,5 +160,5 @@ class Req:
             return resp
         except Exception as err:
             logging.error(f'Other error occurred: {err}')  # Python 3.6
-        else: 
+        else:
             return self._response(resp, uri)
