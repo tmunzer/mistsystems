@@ -3,13 +3,13 @@ class Site():
     def __init__(self, session):
         self.session = session
 
-    def get_info(self, site_id):
-        uri = "/api/v1/sites/{0}/setting".format(site_id)
+    def get(self, site_id):
+        uri = "/api/v1/sites/{0}".format(site_id)
         resp = self.session.mist_get(uri)
         return resp
 
     def get_stats(self, site_id):
-        uri = "/api/v1/sites/{0}/setting".format(site_id)
+        uri = "/api/v1/sites/{0}/stats".format(site_id)
         resp = self.session.mist_get(uri)
         return resp
 
