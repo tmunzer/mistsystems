@@ -1,6 +1,6 @@
 '''
 Written by: Thomas Munzer (tmunzer@juniper.net)
-Github repository: https://github.com/tmunzer/Mist_library/
+Github repository: https://github.com/tmunzer/mistsystems/
 '''
 import logging
 import requests
@@ -33,6 +33,8 @@ clouds = [
 ]
 
 #### PARAMETERS #####
+
+
 class MistSystems():
     """
     Initialize the Mist session, and validate the credentials. The session information can be passed as parameters,
@@ -46,8 +48,10 @@ class MistSystems():
         settings_file: String (file containing configuration. Only used if host and email/pwd or apitoken are not specified)
         auto_login: Boolean (if the script has to validate the credentials automatically)
     """
+
     def __init__(self, host=None, email="", password="", apitoken=None, session_file=None, settings_file=None, auto_login=True):
-        self._session = MistSession(host, email, password, apitoken, session_file, settings_file, auto_login)
+        self._session = _MistSession(
+            host, email, password, apitoken, session_file, settings_file, auto_login)
         self.privileges = Privileges(self._session.privileges)
         self.orgs = Orgs(self._session)
         self.sites = Sites(self._session)
@@ -64,7 +68,7 @@ class MistSystems():
             self.privileges = []
 
 
-class MistSession(Req):
+class _MistSession(Req):
     """
     Initialize the Mist session, and validate the credentials. The session information can be passed as parameters,
     loaded from the config file, or loaded from a saved session.
@@ -94,9 +98,9 @@ class MistSession(Req):
             self._restore_session(session_file)
         if self.authenticated == False:
             self._create_session(settings_file)
-        #Try to log in
-        if (auto_login): self.login()
-
+        # Try to log in
+        if (auto_login):
+            self.login()
 
     def login(self):
         """
@@ -114,7 +118,8 @@ class MistSession(Req):
                 logging.info("authenticated")
                 self._set_session(True)
             elif resp.status_code == 400:
-                logging.error("not authenticated: {0}".format(resp.json["detail"]))
+                logging.error("not authenticated: {0}".format(
+                    resp.json["detail"]))
                 return False
             else:
                 try:
@@ -130,7 +135,6 @@ class MistSession(Req):
         else:
             logging.error("Authentication failed... Exiting...")
 
-
     def logout(self):
         """
         Logout from the Mist Cloud. This will mainly clear the session information.
@@ -140,7 +144,7 @@ class MistSession(Req):
         if resp['status_code'] == 200:
             logging.warning("Logged out")
             self._set_session(False)
-            self.privileges=[]
+            self.privileges = []
             return True
         else:
             try:
@@ -190,12 +194,14 @@ class MistSession(Req):
         loop = True
         resp = "x"
         while loop:
-            i=0
+            i = 0
             print("\r\nAvailable Clouds:")
             for cloud in clouds:
-                print("{0}) {1} (host: {2})".format(i, cloud["short"], cloud["host"]))
-                i+=1
-            resp = input("\r\nSelect a Cloud (0 to {0}, or q to exit): ".format(i))
+                print("{0}) {1} (host: {2})".format(
+                    i, cloud["short"], cloud["host"]))
+                i += 1
+            resp = input(
+                "\r\nSelect a Cloud (0 to {0}, or q to exit): ".format(i))
             if resp == "q":
                 exit(0)
             elif resp == "i":
@@ -207,7 +213,8 @@ class MistSession(Req):
                         loop = False
                         return clouds[resp_num]["host"]
                     else:
-                        print("Please enter a number between 0 and {0}.".format(i))
+                        print(
+                            "Please enter a number between 0 and {0}.".format(i))
                 except:
                     print("Please enter a number.")
 
@@ -227,10 +234,12 @@ class MistSession(Req):
                         if "password" in credentials:
                             self.password = credentials["password"]
                     else:
-                        logging.error("Credentials invalid... Can't use the information from config.py...")
+                        logging.error(
+                            "Credentials invalid... Can't use the information from config.py...")
                         raise ValueError
             except:
-                logging.info("Unable to load the configuration file. Asking for Login/Password")
+                logging.info(
+                    "Unable to load the configuration file. Asking for Login/Password")
         if not self.host:
             self.host = self._select_cloud()
         if self.apitoken:
@@ -251,7 +260,8 @@ class MistSession(Req):
             self.authenticated = True
             if not self.apitoken:
                 try:
-                    cookies_ext = next(item["cookies_ext"] for item in clouds if item["host"] == self.host)
+                    cookies_ext = next(item["cookies_ext"]
+                                       for item in clouds if item["host"] == self.host)
                 except:
                     cookies_ext = ""
                 self.csrftoken = self.session.cookies['csrftoken' + cookies_ext]
@@ -290,7 +300,8 @@ class MistSession(Req):
         parameter:
             token_id: String (ID of the API token to remove. can be retrieved with get_api_tokens() function)
         """
-        uri = "https://{0}/api/v1/self/apitokens/{1}".format(self.host, token_id)
+        uri = "https://{0}/api/v1/self/apitokens/{1}".format(
+            self.host, token_id)
         resp = self.session.delete(uri)
         return resp
 
@@ -313,7 +324,7 @@ class MistSession(Req):
 
     def _two_factor_authentication_token(self, two_factor):
         uri = "/api/v1/login/two_factor"
-        body = { "two_factor": two_factor }
+        body = {"two_factor": two_factor}
         resp = self.session.post(self._url(uri), json=body)
         if resp.status_code == 200:
             logging.info("2FA authentication successed")
@@ -360,7 +371,8 @@ class MistSession(Req):
                 return True
         else:
             logging.error("Authentication not valid...")
-            resp = input("Do you want to try with new credentials for {0} (y/N)? ".format(self.host))
+            resp = input(
+                "Do you want to try with new credentials for {0} (y/N)? ".format(self.host))
             if resp.lower() == "y":
                 self._create_session(settings_file=None)
                 return self.getself()
@@ -377,12 +389,14 @@ class MistSession(Req):
         if self.apitoken != None:
             logging.error("API Token used. There is no cookies to save...")
         else:
-            logging.warning("This will save in clear text your session cookies!")
+            logging.warning(
+                "This will save in clear text your session cookies!")
             sure = input("Are you sure? (y/N)")
             if sure.lower() == "y":
                 with open(file_path, 'w') as f:
                     for cookie in self.session.cookies:
-                        cookie_json = json.dumps({"cookie":{"domain": cookie.domain, "name": cookie.name, "value": cookie.value}})
+                        cookie_json = json.dumps(
+                            {"cookie": {"domain": cookie.domain, "name": cookie.name, "value": cookie.value}})
                         f.write("{0}\r\n".format(cookie_json))
                     host = json.dumps({"host": self.host})
                     f.write("{0}\r\n".format(host))
