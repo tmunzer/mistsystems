@@ -6,7 +6,7 @@ class Const():
 
 class Orgs():
     def __init__(self, session):
-        self.admin = orgs.admins.Admins(session)
+        self.admins = orgs.admins.Admins(session)
         self.alarms = orgs.alarms.Alarms(session)
         self.alarmtemplates = orgs.alarmtemplates.AlarmTemplates(session)
         self.assetfilters = orgs.assetfilters.AssetFilters(session)

@@ -1,9 +1,6 @@
-from mistsystems.models.common.sites import SiteModel
-import logging
-import json
+from mistsystems.models.orgs.admins import AdminModel
 
-
-class Sites(SiteModel):
+class Admins(AdminModel):
     def __init__(self, session, org_id):
         self._session = session
         self._org_id = org_id
@@ -17,12 +14,15 @@ class Sites(SiteModel):
         else:
             print("creating {0}".format(obj))
 
-    def get_by_id(self, site_id):
-        site_json = self._session.sites.site.get(site_id=site_id)["result"]
+    def get(self):
+        site_json = self._session.orgs.admins.get(org_id=self._org_id)["result"]
         self.set_json(site_json)
         return self
 
-    def search(self, name=""):
+    def revoke(self):
+        self._session.orgs.admins.revoke(self._org_id, self._get_attribute("admin_id"))
+
+    def search(self, first_name=""):
         sites = []
         data = self._session.orgs.sites.get(org_id=self._org_id)["result"]
 
