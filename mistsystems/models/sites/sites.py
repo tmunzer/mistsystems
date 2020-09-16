@@ -1,153 +1,125 @@
+from mistsystems.models.mist_obj import MistModel
 import logging
 
 
-class SiteModel():
-    def __init__(self, site_id=None):
-        self.id = site_id
-        self.name = None
-        self.timezone = None
-        self.country_code = None
-        self.latlng = None
-        self.address = None
-        self.sitegroup_ids = None
-        self.lat = None
-        self.lng = None
-        self.org_id = None
-        self.created_time = None
-        self.modified_time = None
-        self.rftempalte_id = None
-        self.secpolicy_id = None
-        self.alarmtemplate_id = None
-        self.networktemplate_id = None
-        self.tzoffset = None
-
-    def _set_id(self, site_id):
-        self.id = site_id
-
-    def _set_org_id(self, org_id):
-        self.org_id = org_id
-
-    def _set_created_time(self, created_time):
-        self.created_time = created_time
-
-    def _set_modified_time(self, modified_time):
-        self.modified_time = modified_time
-
-    def set_name(self, name):
-        self.name = name
-
-    def set_timezone(self, timezone):
-        self.timezone = timezone
-
-    def set_country_code(self, country_code):
-        self.country_code = country_code
-
-    def set_latlng(self, latlng):
-        self.latlng = latlng
-
-    def set_address(self, address):
-        self.address = address
-
-    def set_sitegroupo_ids(self, sitegroup_ids):
-        self.sitegroup_ids = sitegroup_ids
-
-    def set_lat(self, lat):
-        self.lat = lat
-
-    def set_lng(self, lng):
-        self.lng = lng
-
-    def set_rftempalte_id(self, rftempalte_id):
-        self.rftempalte_id = rftempalte_id
-
-    def set_secpolicy_id(self, secpolicy_id):
-        self.secpolicy_id = secpolicy_id
-
-    def set_alarmtemplate_id(self, alarmtemplate_id):
-        self.alarmtemplate_id = alarmtemplate_id
-
-    def set_networktemplate_id(self, networktemplate_id):
-        self.networktemplate_id = networktemplate_id
-
-    def set_tzoffset(self, tzoffset):
-        self.tzoffset = tzoffset
-
-    def from_json(self, data):
-        if "id" in data: self._set_id(data["id"])
-        if "org_id" in data: self._set_org_id(data["org_id"])
-        if "created_time" in data: self._set_created_time(data["created_time"])
-        if "modified_time" in data: self._set_modified_time(data["modified_time"])
-        if "name" in data: self.set_name(data["name"])
-        if "timezone" in data: self.set_timezone(data["timezone"])
-        if "country_code" in data: self.set_country_code(data["country_code"])
-        if "latlng" in data: self.set_latlng(data["latlng"])
-        if "address" in data: self.set_address(data["address"])
-        if "sitegroup_ids" in data: self.sitegroup_ids(data["sitegroup_ids"])
-        if "lat" in data: self.set_lat(data["lat"])
-        if "lng" in data: self.set_lng(data["lng"])
-        if "rftempalte_id" in data: self.set_rftempalte_id(data["rftempalte_id"])
-        if "secpolicy_id" in data: self.set_secpolicy_id(data["secpolicy_id"])
-        if "alarmtemplate_id" in data: self.set_alarmtemplate_id(data["alarmtemplate_id"])
-        if "networktemplate_id" in data: self.set_networktemplate_id(data["networktemplate_id"])
-        if "tzoffset" in data: self.set_tzoffset(data["tzoffset"])
-        
-    
-    def to_json(self):
-        data = {}
-        for entry in self.__dict__:
-            if not entry.startswith("_"):
-                data[entry] = self.__dict__[entry]
-        return data
-        
-
-    def get_id(self):
-        return self.id
+class SiteModel(MistModel):
+    def __init__(self):
+        self.json = {}
+        self._fields = [
+            "id",
+            "created_time",
+            "modified_time",
+            "name",
+            "timezone",
+            "country_code",
+            "latlng",
+            "sitegroups_ids",
+            "lat",
+            "lng",
+            "org_id",
+            "rftemplate_id",
+            "secpolicy_id",
+            "alarmtemplate_id",
+            "networktemplate_id",
+            "tzoffset"
+        ]
 
     def get_org_id(self):
-        return self.org_id 
+        return self.json["org_id"]
 
-    def get_created_time(self):
-        return self.created_time
-
-    def get_modified_time(self):
-        return self.modified_time
+    def _set_org_id(self, org_id):
+        self.json["org_id"] = org_id
 
     def get_name(self):
-        return self.name 
+        return self.json["name"]
+
+    def set_name(self, name):
+        self.json["name"] = name
 
     def get_timezone(self):
-        return self.timezone 
+        return self.json["timezone"]
+
+    def set_timezone(self, timezone):
+        self.json["timezone"] = timezone
 
     def get_country_code(self):
-        return self.country_code
+        return self.json["country_code"]
+
+    def set_country_code(self, country_code):
+        self.json["country_code"] = country_code
 
     def get_latlng(self):
-        return self.latlng
+        return self.json["latlng"]
+
+    def set_latlng(self, latlng):
+        self.json["latlng"] = latlng
 
     def get_address(self):
-        return self.address 
+        return self.json["address"]
+
+    def set_address(self, address):
+        self.json["address"] = address
 
     def get_sitegroup_ids(self):
-        return self.sitegroup_ids 
+        return self.json["sitegroup_ids"]
+
+    def set_sitegroup_ids(self, sitegroup_ids=[]):
+        self.json["sitegroup_ids"] = sitegroup_ids
+
+    def add_sitegroup_ids(self, sitegroup_ids=[]):
+        for entry in sitegroup_ids:
+            if not entry in self.json["sitegroup_ids"]:
+                self.json["sitegroup_ids"].append(entry)
+
+    def del_sitegroup_ids(self, sitegroup_ids=[]):
+        for entry in sitegroup_ids:
+            try:
+                index = self.json["sitegroup_ids"].index(entry)
+                if index:
+                    self.json["sitegroup_ids"].pop(index)
+            except:
+                logging.warn("sitegroup_id {0} no found".format(entry))
 
     def get_lat(self):
-        return self.lat
+        return self.json["lat"]
+
+    def set_lat(self, lat):
+        self.json["lat"] = lat
 
     def get_lng(self):
-        return self.lng 
+        return self.json["lng"]
+
+    def set_lng(self, lng):
+        self.json["lng"] = lng
 
     def get_rftempalte_id(self):
-        return self.rftempalte_id
+        return self.json["rftempalte_id"]
+
+    def set_rftempalte_id(self, rftempalte_id):
+        self.json["rftempalte_id"] = rftempalte_id
 
     def get_secpolicy_id(self):
-        return self.secpolicy_id 
+        return self.json["secpolicy_id"]
+
+    def set_secpolicy_id(self, secpolicy_id):
+        self.json["secpolicy_id"] = secpolicy_id
 
     def get_alarmtemplate_id(self):
-        return self.alarmtemplate_id
+        return self.json["alarmtemplate_id"]
+
+    def set_alarmtemplate_id(self, alarmtemplate_id):
+        self.json["alarmtemplate_id"] = alarmtemplate_id
 
     def get_networktemplate_id(self):
-        return self.networktemplate_id
+        return self.json["networktemplate_id"]
+
+    def set_networktemplate_id(self, networktemplate_id):
+        self.json["networktemplate_id"] = networktemplate_id
 
     def get_tzoffset(self):
-        return self.tzoffset 
+        return self.json["tzoffset"]
 
+    def set_tzoffset(self, tzoffset):
+        self.json["tzoffset"] = tzoffset
+
+  
