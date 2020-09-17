@@ -52,7 +52,7 @@ class Req:
                     html_query += "{0}={1}&".format(query_param, query[query_param])
             if limit: html_query += "limit={0}&".format(limit)
             if page: html_query += "page={0}".format(page)
-            url += html_query
+            if not html_query == "?": url += html_query
             logging.debug("Request > GET {0}".format(url))
             resp = self.session.get(url)
             resp.raise_for_status()
@@ -63,12 +63,17 @@ class Req:
             logging.error(f'Other error occurred: {err}')  # Python 3.6
         else:
             if "X-Page-Limit" in resp.headers:
-                content = resp.json()
+                content = resp.json()["results"]
                 x_page_limit = int(resp.headers["X-Page-Limit"])
                 x_page_page = int(resp.headers["X-Page-Page"])
                 x_page_total = int(resp.headers["X-Page-Total"])
                 if x_page_limit * x_page_page < x_page_total:
                     content+=self.mist_get(uri, query, page + 1, limit)["result"]
+                return self._response(resp, uri, content)
+            elif  "next" in resp.json():
+                content = resp.json()["results"]
+                uri = resp.json()["next"]
+                content += self.mist_get(uri)["result"]
                 return self._response(resp, uri, content)
             else:
                 return self._response(resp, uri)
