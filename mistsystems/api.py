@@ -84,7 +84,7 @@ class _MistSession(Req):
 
     def __init__(self, host=None, email="", password="", apitoken=None, session_file=None, settings_file=None, auto_login=True):
 
-        self.session = requests.session()
+        self._session = requests.session()
         # user and https session parameters
         self.host = host
         self.email = email
@@ -113,7 +113,7 @@ class _MistSession(Req):
                 "email": self.email,
                 "password": self.password
             }
-            resp = self.session.post(self._url(uri), json=body)
+            resp = self._session.post(self._url(uri), json=body)
             if resp.status_code == 200:
                 logging.info("authenticated")
                 self._set_session(True)
@@ -181,11 +181,11 @@ class _MistSession(Req):
                     line = json.loads(line)
                     if "cookie" in line:
                         cookie = line["cookie"]
-                        self.session.cookies.set(**cookie)
+                        self._session.cookies.set(**cookie)
                     elif "host" in line:
                         self.host = line["host"]
             logging.info("Session restored from file {0}".format(file))
-            logging.debug("Cookies > {0}".format(self.session.cookies))
+            logging.debug("Cookies > {0}".format(self._session.cookies))
             logging.debug("Host > {0}".format(self.host))
         except:
             logging.warning("Unable to load session...")
@@ -219,7 +219,7 @@ class _MistSession(Req):
                     print("Please enter a number.")
 
     def _create_session(self, settings_file=None):
-        self.session = requests.session()
+        self._session = requests.session()
 
         if settings_file:
             try:
@@ -253,7 +253,7 @@ class _MistSession(Req):
     def _set_apitoken(self, apitoken):
         logging.info("API Token authentication used")
         self.apitoken = apitoken
-        self.session.headers.update({'Authorization': "Token " + apitoken})
+        self._session.headers.update({'Authorization': "Token " + apitoken})
 
     def _set_session(self, value):
         if value == True:
@@ -264,12 +264,12 @@ class _MistSession(Req):
                                        for item in clouds if item["host"] == self.host)
                 except:
                     cookies_ext = ""
-                self.csrftoken = self.session.cookies['csrftoken' + cookies_ext]
-                self.session.headers.update({'X-CSRFToken': self.csrftoken})
+                self.csrftoken = self._session.cookies['csrftoken' + cookies_ext]
+                self._session.headers.update({'X-CSRFToken': self.csrftoken})
         elif value == False:
             self.authenticated = False
             self.csrftoken = ""
-            self.session = requests.session()
+            self._session = requests.session()
 
     def get_auth_status(self):
         """
@@ -283,7 +283,7 @@ class _MistSession(Req):
         Retrieve the user's API token from the Mist Cloud
         """
         uri = "https://{0}/api/v1/self/apitokens".format(self.host)
-        resp = self.session.get(uri)
+        resp = self._session.get(uri)
         return resp
 
     def create_api_token(self):
@@ -291,7 +291,7 @@ class _MistSession(Req):
         Create a new API token for the current user
         """
         uri = "https://{0}/api/v1/self/apitokens".format(self.host)
-        resp = self.session.post(uri)
+        resp = self._session.post(uri)
         return resp
 
     def delete_api_token(self, token_id):
@@ -302,7 +302,7 @@ class _MistSession(Req):
         """
         uri = "https://{0}/api/v1/self/apitokens/{1}".format(
             self.host, token_id)
-        resp = self.session.delete(uri)
+        resp = self._session.delete(uri)
         return resp
 
     def _two_factor_authentication(self, two_factor):
@@ -312,7 +312,7 @@ class _MistSession(Req):
             "password": self.password,
             "two_factor": two_factor
         }
-        resp = self.session.post(self._url(uri), json=body)
+        resp = self._session.post(self._url(uri), json=body)
         if resp.status_code == 200:
             logging.info("2FA authentication successed")
             self._set_session(True)
@@ -325,7 +325,7 @@ class _MistSession(Req):
     def _two_factor_authentication_token(self, two_factor):
         uri = "/api/v1/login/two_factor"
         body = {"two_factor": two_factor}
-        resp = self.session.post(self._url(uri), json=body)
+        resp = self._session.post(self._url(uri), json=body)
         if resp.status_code == 200:
             logging.info("2FA authentication successed")
             self._set_session(True)
@@ -394,7 +394,7 @@ class _MistSession(Req):
             sure = input("Are you sure? (y/N)")
             if sure.lower() == "y":
                 with open(file_path, 'w') as f:
-                    for cookie in self.session.cookies:
+                    for cookie in self._session.cookies:
                         cookie_json = json.dumps(
                             {"cookie": {"domain": cookie.domain, "name": cookie.name, "value": cookie.value}})
                         f.write("{0}\r\n".format(cookie_json))

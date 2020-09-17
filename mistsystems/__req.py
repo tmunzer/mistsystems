@@ -10,7 +10,7 @@ class Req:
 
     def __init__(self):
         self.host = ""
-        self.session = requests.session()
+        self._session = requests.session()
         self.privileges = ""
 
 
@@ -54,7 +54,7 @@ class Req:
             if page: html_query += "page={0}".format(page)
             if not html_query == "?": url += html_query
             logging.debug("Request > GET {0}".format(url))
-            resp = self.session.get(url)
+            resp = self._session.get(url)
             resp.raise_for_status()
         except HTTPError as http_err:
             logging.error(f'HTTP error occurred: {http_err}')  # Python 3.6
@@ -90,11 +90,11 @@ class Req:
             logging.debug("Request > POST {0}".format(url))
             logging.debug("Request body: \r\n{0}".format(body))
             if type(body) == str:
-                resp = self.session.post(url, data=body, headers=headers)
+                resp = self._session.post(url, data=body, headers=headers)
             elif type(body) == dict:
-                resp = self.session.post(url, json=body, headers=headers)
+                resp = self._session.post(url, json=body, headers=headers)
             else:
-                resp = self.session.post(url, json=body, headers=headers)
+                resp = self._session.post(url, json=body, headers=headers)
             resp.raise_for_status()
         except HTTPError as http_err:
             logging.error(f'HTTP error occurred: {http_err}')  # Python 3.6
@@ -115,11 +115,11 @@ class Req:
             logging.debug("Request > PUT {0}".format(url))
             logging.debug("Request body: \r\n{0}".format(body))
             if type(body) == str:
-                resp = self.session.put(url, data=body)
+                resp = self._session.put(url, data=body)
             elif type(body) == dict:
-                resp = self.session.put(url, json=body)
+                resp = self._session.put(url, json=body)
             else:
-                resp = self.session.put(url, json=body)
+                resp = self._session.put(url, json=body)
             resp.raise_for_status()
         except HTTPError as http_err:
             logging.error(f'HTTP error occurred: {http_err}')  # Python 3.6
@@ -138,7 +138,7 @@ class Req:
         try:
             url = self._url(uri)
             logging.debug("Request > DELETE {0}".format(url))
-            resp = self.session.delete(url)
+            resp = self._session.delete(url)
             resp.raise_for_status()
         except HTTPError as http_err:
             logging.error(f'HTTP error occurred: {http_err}')  # Python 3.6
@@ -157,7 +157,7 @@ class Req:
         try:
             url = self._url(uri)
             logging.debug("Request > POST {0}".format(url))
-            resp = self.session.post(url, files=files)
+            resp = self._session.post(url, files=files)
             resp.raise_for_status()
         except HTTPError as http_err:
             logging.error(f'HTTP error occurred: {http_err}')  # Python 3.6

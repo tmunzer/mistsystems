@@ -1,6 +1,6 @@
 class Wireless():
     def __init__(self, session):
-        self.session = session
+        self._session = session
 
     def search(self, org_id, query={}, page=1, limit=100):
         """
@@ -15,7 +15,7 @@ class Wireless():
             limit: Int
         """
         uri = "/api/v1/orgs/{0}/clients/search".format(org_id)
-        resp = self.session.mist_get(uri, query=query,page=page, limit=limit)
+        resp = self._session.mist_get(uri, query=query,page=page, limit=limit)
         return resp
 
     def count(self, org_id, distinct="device", page=1, limit=100):
@@ -27,7 +27,7 @@ class Wireless():
             limit: Int
         """
         uri = "/api/v1/orgs/{0}/clients/count".format(org_id)
-        resp = self.session.mist_get(uri, query={"distinct": distinct},page=page, limit=limit)
+        resp = self._session.mist_get(uri, query={"distinct": distinct},page=page, limit=limit)
         return resp
 
 
@@ -48,7 +48,7 @@ class Wireless():
             limit: Int
         """
         uri = "/api/v1/orgs/{0}/clients/sessions/search".format(org_id)
-        resp = self.session.mist_get(uri, query=query,page=page, limit=limit)
+        resp = self._session.mist_get(uri, query=query,page=page, limit=limit)
         return resp
 
     def count_sessions(self, org_id, distinct="mac", page=1, limit=100):
@@ -60,7 +60,7 @@ class Wireless():
             limit: Int
         """
         uri = "/api/v1/orgs/{0}/clients/sessions/count".format(org_id)
-        resp = self.session.mist_get(uri, query={"distinct": distinct},page=page, limit=limit)
+        resp = self._session.mist_get(uri, query={"distinct": distinct},page=page, limit=limit)
         return resp
 
         

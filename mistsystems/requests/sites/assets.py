@@ -1,7 +1,7 @@
 class Assets():
 
     def __init__(self, session):
-        self.session = session
+        self._session = session
 
     def create(self, site_id, asset_settings):
         """
@@ -14,7 +14,7 @@ class Assets():
         """
         uri = "/api/v1/sites/{0}/assets".format(site_id)
         body = asset_settings
-        resp = self.session.mist_post(uri, body=body)
+        resp = self._session.mist_post(uri, body=body)
         return resp
 
     def update(self, site_id, asset_id, asset_settings):
@@ -28,7 +28,7 @@ class Assets():
                 mac|string|bluetooth MAC
         """
         uri = "/api/v1/sites/{0}/assets/{1}".format(site_id, asset_id)
-        resp = self.session.mist_put(uri, body=asset_settings)
+        resp = self._session.mist_put(uri, body=asset_settings)
         return resp
 
     def delete(self, site_id, asset_id):
@@ -39,7 +39,7 @@ class Assets():
             asset_id: String
         """
         uri = "/api/v1/sites/{0}/assets/{1}".format(site_id, asset_id)
-        resp = self.session.mist_delete(uri)
+        resp = self._session.mist_delete(uri)
         return resp
 
     def get(self, site_id, query={}, page=1, limit=100):
@@ -52,7 +52,7 @@ class Assets():
             limit: Int (maximum number of entries per request)
         """
         uri = "/api/v1/sites/{0}/assets".format(site_id)
-        resp = self.session.mist_get(uri, query=query, page=page, limit=limit)
+        resp = self._session.mist_get(uri, query=query, page=page, limit=limit)
         return resp
 
     def get_by_id(self, site_id, asset_id):
@@ -63,7 +63,7 @@ class Assets():
             asset_id: String
         """
         uri = "/api/v1/sites/{0}/assets/{1}".format(site_id, asset_id)
-        resp = self.session.mist_get(uri)
+        resp = self._session.mist_get(uri)
         return resp
 
     def get_stats(self, site_id, page=1, limit=100):
@@ -75,7 +75,7 @@ class Assets():
             limit: Int (maximum number of entries per request)
         """
         uri = "/api/v1/sites/{0}/stats/assets".format(site_id)
-        resp = self.session.mist_get(uri, page=page, limit=limit)
+        resp = self._session.mist_get(uri, page=page, limit=limit)
         return resp
 
     def get_stats_by_id(self, site_id, asset_id):
@@ -86,7 +86,7 @@ class Assets():
             asset_id: String
         """
         uri = "/api/v1/sites/{0}/stats/assets/{1}".format(site_id, asset_id)
-        resp = self.session.mist_get(uri)
+        resp = self._session.mist_get(uri)
         return resp
 
     def get_discovered_asset(self, site_id, page=1, limit=100):
@@ -98,7 +98,7 @@ class Assets():
             limit: Int (maximum number of entries per request)
         """
         uri = "/api/v1/sites/{0}/stats/discovered_assets".format(site_id)
-        resp = self.session.mist_get(uri, page=page, limit=limit)
+        resp = self._session.mist_get(uri, page=page, limit=limit)
         return resp
 
     def get_discovered_asset_by_map(self, site_id, map_id, page=1, limit=100):
@@ -111,6 +111,6 @@ class Assets():
             limit: Int (maximum number of entries per request)
         """
         uri = "/api/v1/sites/{0}/stats/maps/{1}/discovered_assets".format(site_id, map_id)
-        resp = self.session.mist_get(uri, page=page, limit=limit)
+        resp = self._session.mist_get(uri, page=page, limit=limit)
         return resp
 

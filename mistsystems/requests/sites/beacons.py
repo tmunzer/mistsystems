@@ -1,7 +1,7 @@
 class Beacons():
 
     def __init__(self, session):
-        self.session = session
+        self._session = session
 
     def create(self, site_id, beacon_settings):
         """
@@ -24,7 +24,7 @@ class Beacons():
                 mac: string: optional, MAC of the beacon, currently used only to identify battery voltage
         """
         uri = "/api/v1/sites/{0}/beacons".format(site_id)
-        resp = self.session.mist_post(uri, body=beacon_settings)
+        resp = self._session.mist_post(uri, body=beacon_settings)
         return resp
 
     def update(self, site_id, beacon_id, beacon_settings):
@@ -49,7 +49,7 @@ class Beacons():
                 mac: string: MAC of the beacon, currently used only to identify battery voltage
         """
         uri = "/api/v1/sites/{0}/beacons/{1}".format(site_id, beacon_id)
-        resp = self.session.mist_put(uri, body=beacon_settings)
+        resp = self._session.mist_put(uri, body=beacon_settings)
         return resp
 
     def delete(self, site_id, beacon_id):
@@ -60,7 +60,7 @@ class Beacons():
             beacon_id: String
         """
         uri = "/api/v1/sites/{0}/beacons/{1}".format(site_id, beacon_id)
-        resp = self.session.mist_delete(uri)
+        resp = self._session.mist_delete(uri)
         return resp
 
     def get(self, site_id, page=1, limit=100):
@@ -72,7 +72,7 @@ class Beacons():
             limit: Int (maximum number of entries per request)
         """
         uri = "/api/v1/sites/{0}/beacons".format(site_id)
-        resp = self.session.mist_get(uri, page=page, limit=limit)
+        resp = self._session.mist_get(uri, page=page, limit=limit)
         return resp
 
     def get_by_id(self, site_id, beacon_id):
@@ -83,7 +83,7 @@ class Beacons():
             beacon_id: String            
         """
         uri = "/api/v1/sites/{0}/beacons/{1}".format(site_id, beacon_id)
-        resp = self.session.mist_get(uri)
+        resp = self._session.mist_get(uri)
         return resp
 
     def get_stats(self, site_id, page=1, limit=100):
@@ -95,5 +95,5 @@ class Beacons():
             limit: Int (maximum number of entries per request)
         """
         uri = "/api/v1/sites/{0}/stats/beacons".format(site_id)
-        resp = self.session.mist_get(uri, page=page, limit=limit)
+        resp = self._session.mist_get(uri, page=page, limit=limit)
         return resp

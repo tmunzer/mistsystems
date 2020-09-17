@@ -1,6 +1,7 @@
 from mistsystems.requests.orgs import admins
 from mistsystems.requests.orgs import alarms
 from mistsystems.requests.orgs import alarmtemplates
+from mistsystems.requests.orgs import apitokens
 from mistsystems.requests.orgs import assetfilters
 from mistsystems.requests.orgs import audit_logs
 from mistsystems.requests.orgs import certificates

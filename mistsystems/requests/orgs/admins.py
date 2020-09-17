@@ -1,11 +1,11 @@
 class Admins():
 
     def __init__(self, session):
-        self.session = session
+        self._session = session
 
     def get(self, org_id):
         uri = "/api/v1/orgs/%s/admins" % org_id
-        resp = self.session.mist_get(uri)
+        resp = self._session.mist_get(uri)
         return resp
 
     def update(self, org_id, admin_id, privileges=""):
@@ -13,12 +13,12 @@ class Admins():
         body = {}
         if privileges != "":
             body["privileges"] = privileges
-        resp = self.session.mist_put(uri, body=body)
+        resp = self._session.mist_put(uri, body=body)
         return resp
 
     def revoke(self, org_id, admin_id):
         uri = "/api/v1/orgs/%s/admins/%s" % (org_id, admin_id)
-        resp = self.session.mist_delete(uri, org_id=org_id)
+        resp = self._session.mist_delete(uri, org_id=org_id)
         return resp
 
     def create_invite(self, org_id, email, privileges, first_name="", last_name="", hours=24):
@@ -30,17 +30,17 @@ class Admins():
             "hours": hours,
             "privileges": privileges
         }
-        resp = self.session.mist_post(uri, body=body)
+        resp = self._session.mist_post(uri, body=body)
         return resp
 
     def verify_invite(self, token):
         uri="/api/v1/invite/verify/{0}".format(token)
-        resp = self.session.mist_get(uri)
+        resp = self._session.mist_get(uri)
         return resp
         
     def delete_invite(self, org_id, invite_id):
         uri = "/api/v1/orgs/%s/invites/%s" % (org_id, invite_id)
-        resp = self.session.mist_delete(uri, org_id=org_id)
+        resp = self._session.mist_delete(uri, org_id=org_id)
         return resp
 
     def update_invite(self, org_id, invite_id, email="", privileges="", first_name="", last_name="", hours=""):
@@ -56,5 +56,5 @@ class Admins():
             body["hours"] = hours
         if privileges != "":
             body["privileges"] = privileges
-        resp = self.session.mist_put(uri, body=body)
+        resp = self._session.mist_put(uri, body=body)
         return resp
