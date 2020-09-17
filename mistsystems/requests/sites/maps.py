@@ -1,7 +1,7 @@
 class Maps():
 
     def __init__(self, session):
-        self.session = session
+        self._session = session
 
     def get(self, site_id, page=1, limit=100):
         """
@@ -12,7 +12,7 @@ class Maps():
             limit: Int
         """
         uri = "/api/v1/sites/%s/maps" % site_id
-        resp = self.session.mist_get(uri, page=page, limit=limit)
+        resp = self._session.mist_get(uri, page=page, limit=limit)
         return resp
 
     def get_by_id(self, site_id, map_id):
@@ -23,7 +23,7 @@ class Maps():
             map_id: String
         """
         uri = "/api/v1/sites/{0}/maps/{1}".format(site_id, map_id)
-        resp = self.session.mist_get(uri)
+        resp = self._session.mist_get(uri)
         return resp
 
     def delete(self, site_id, map_id):
@@ -34,7 +34,7 @@ class Maps():
             map_id: String
         """
         uri = "/api/v1/sites/%s/maps/%s" % (site_id, map_id)
-        resp = self.session.mist_delete(uri)
+        resp = self._session.mist_delete(uri)
         return resp
 
     def create(self, site_id, map_settings):
@@ -46,7 +46,7 @@ class Maps():
         """
         uri = "/api/v1/sites/%s/maps" % site_id
         body = map_settings
-        resp = self.session.mist_post(uri, body=body)
+        resp = self._session.mist_post(uri, body=body)
         return resp
 
     def update(self, site_id, map_id, map_settings):
@@ -59,7 +59,7 @@ class Maps():
         """
         uri = "/api/v1/sites/{0}/maps/{1}".format(site_id, map_id)
         body = map_settings
-        resp = self.session.mist_put(uri, body=body)
+        resp = self._session.mist_put(uri, body=body)
         return resp
 
     def add_image(self, site_id, map_id, image_path):
@@ -72,7 +72,7 @@ class Maps():
         """
         uri = "/api/v1/sites/%s/maps/%s/image" % (site_id, map_id)
         files = {'file': open(image_path, 'rb').read()}
-        resp = self.session.mist_post_file(uri, files=files)
+        resp = self._session.mist_post_file(uri, files=files)
         return resp
 
     def delete_image(self, site_id, map_id):
@@ -83,7 +83,7 @@ class Maps():
             map_id: String
         """
         uri = "/api/v1/sites/%s/maps/%s/image" % (site_id, map_id)
-        resp = self.session.mist_delete(uri)
+        resp = self._session.mist_delete(uri)
         return resp
 
     def replace_image(self, site_id, map_id, image_path, image_settings):
@@ -101,5 +101,5 @@ class Maps():
                 rotation: int: whether to rotate the replacing image, default is 0, in degrees
         """
         uri = "/api/v1/sites/%s/maps/%s/replace" % (site_id, map_id)
-        resp = self.session.mist_post(uri, body=image_settings, files=image_path)
+        resp = self._session.mist_post(uri, body=image_settings, files=image_path)
         return resp

@@ -1,7 +1,7 @@
 class Psks():
 
     def __init__(self, session):
-        self.session = session
+        self._session = session
 
     def create(self, org_id, psk_settings):
         """
@@ -17,7 +17,7 @@ class Psks():
                 mac: string: if usage==single, the mac that this PSK ties to, empty if auto-binding
         """
         uri = "/api/v1/orgs/%s/psks" % org_id
-        resp = self.session.mist_post(uri, body=psk_settings)
+        resp = self._session.mist_post(uri, body=psk_settings)
         return resp
 
     def get(self, org_id, name=None, ssid=None, page=1, limit=100):
@@ -36,7 +36,7 @@ class Psks():
             query["name"] = name
         if ssid:
             query["ssid"] = ssid
-        resp = self.session.mist_get(uri, query=query, page=page, limit=limit)
+        resp = self._session.mist_get(uri, query=query, page=page, limit=limit)
         return resp
 
     def get_by_id(self, org_id, psk_id):
@@ -47,7 +47,7 @@ class Psks():
             psk_id: String
         """
         uri = "/api/v1/orgs/{0}/psks/{1}".format(org_id, psk_id)
-        resp = self.session.mist_get(uri)
+        resp = self._session.mist_get(uri)
         return resp
 
 
@@ -59,5 +59,5 @@ class Psks():
             psk_id: String
         """
         uri = "/api/v1/orgs/{0}/psks/{1}".format(org_id, psk_id)
-        resp = self.session.mist_delete(uri)
+        resp = self._session.mist_delete(uri)
         return resp

@@ -1,6 +1,6 @@
 class PacketCaptures():
     def __init__(self, session):
-        self.session = session
+        self._session = session
 
     def get(self, site_id, client_mac=None, start=None, end=None, page=1, limit=100):
         """
@@ -21,7 +21,7 @@ class PacketCaptures():
         if end:
             query["end"] = end
         uri = "/api/v1/sites/{0}/pcaps".format(site_id)
-        resp = self.session.mist_get(uri, page=page, limit=limit)
+        resp = self._session.mist_get(uri, page=page, limit=limit)
         return resp
 
     def get_status(self, site_id):
@@ -32,7 +32,7 @@ class PacketCaptures():
             mxedge_id: String
         """
         uri = "/api/v1/sites/{0}/pcaps/capture".format(site_id)
-        resp = self.session.mist_get(uri)
+        resp = self._session.mist_get(uri)
         return resp
 
     def start(self, site_id, capture_type, num_packets=None, duration=None, max_pkt_length=None, ssid=None, ap_mac=None, client_mac=None):
@@ -62,7 +62,7 @@ class PacketCaptures():
         if client_mac:
             body["client_mac"] = client_mac
         uri = "/api/v1/sites/{0}/pcaps/capture".format(site_id)
-        resp = self.session.mist_post(uri, body=body)
+        resp = self._session.mist_post(uri, body=body)
         return resp
 
     def stop(self, site_id):
@@ -72,5 +72,5 @@ class PacketCaptures():
             site_id: String
         """
         uri = "/api/v1/sites/{0}/pcaps/capture".format(site_id)
-        resp = self.session.mist_delete(uri)
+        resp = self._session.mist_delete(uri)
         return resp

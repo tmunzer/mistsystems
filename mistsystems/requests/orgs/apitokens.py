@@ -1,15 +1,15 @@
 class Apitokens():
     def __init__(self, session):
-        self.session = session
+        self._session = session
 
     def get(self, org_id, page=1, limit=100):
         uri = "/api/v1/orgs/{0}/apitokens".format(org_id)
-        resp = self.session.mist_get(uri, page=page, limit=limit)
+        resp = self._session.mist_get(uri, page=page, limit=limit)
         return resp
 
     def get_by_it(self, org_id, apitoken_id):
         uri = "/api/v1/orgs/{0}/apitokens/{1}".format(org_id, apitoken_id)
-        resp = self.session.mist_get(uri)
+        resp = self._session.mist_get(uri)
         return resp
 
     def create(self, org_id, name, privileges={}):
@@ -29,7 +29,7 @@ class Apitokens():
             "privileges": privileges
         }
         uri = "/api/v1/orgs/{0}/apitokens".format(org_id)
-        resp = self.session.mist_post(uri, body=body)
+        resp = self._session.mist_post(uri, body=body)
         return resp
 
     def update(self, org_id, apitoken_id, name=None, privileges=None):
@@ -51,10 +51,10 @@ class Apitokens():
         if privileges:
             body["privileges"] = privileges
         uri = "/api/v1/orgs/{0}/apitokens/{1}".format(org_id, apitoken_id)
-        resp = self.session.mist_put(uri, body=body)
+        resp = self._session.mist_put(uri, body=body)
         return resp
 
     def delete(self, org_id, apitoken_id):
         uri = "/api/v1/orgs/{0}/apitokens/{1}".format(org_id, apitoken_id)
-        resp = self.session.mist_delete(uri)
+        resp = self._session.mist_delete(uri)
         return resp

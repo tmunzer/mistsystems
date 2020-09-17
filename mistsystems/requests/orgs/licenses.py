@@ -1,16 +1,16 @@
 class Licenses():
 
     def __init__(self, session):
-        self.session = session
+        self._session = session
 
     def summary(self, org_id, page=1, limit=100):
         uri = "/api/v1/orgs/{0}/licenses".format(org_id)
-        resp = self.session.mist_get(uri, page=page, limit=limit)
+        resp = self._session.mist_get(uri, page=page, limit=limit)
         return resp
 
     def usage_by_site(self, org_id, page=1, limit=100):
         uri = "/api/v1/orgs/%s/licenses/usages" % org_id
-        resp = self.session.mist_get(uri, page=page, limit=limit)
+        resp = self._session.mist_get(uri, page=page, limit=limit)
         return resp
 
     def delete(self, org_id, subscription_id): 
@@ -19,7 +19,7 @@ class Licenses():
             "op": "delete",
             "subscription_id": subscription_id
         }
-        resp = self.session.mist_post(uri, body=body)
+        resp = self._session.mist_post(uri, body=body)
         return resp
 
 
@@ -29,7 +29,7 @@ class Licenses():
             "code": code,
             "type": mtype
         }
-        resp = self.session.mist_post(uri, body=body)
+        resp = self._session.mist_post(uri, body=body)
         return resp
 
     def move_to_another_org(self, org_id, subscription_id, dst_org_id, quantity=1):
@@ -40,7 +40,7 @@ class Licenses():
             "dst_org_id": dst_org_id,
             "quantity": quantity
         }
-        resp = self.session.mist_put(uri, body=body)
+        resp = self._session.mist_put(uri, body=body)
         return resp
 
     def undo_licence_move(self, org_id, amendment_id):
@@ -49,5 +49,5 @@ class Licenses():
             "op": "unamend",
             "amendment_id": amendment_id
         }
-        resp = self.session.mist_put(uri, body=body)
+        resp = self._session.mist_put(uri, body=body)
         return resp

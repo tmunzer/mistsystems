@@ -1,15 +1,15 @@
 class Devices():
     def __init__(self, session):
-        self.session = session
+        self._session = session
 
     def get(self, org_id, page=1, limit=100):
         uri = "/api/v1/orgs/{0}/devices".format(org_id)
-        resp = self.session.mist_get(uri, page=page, limit=limit)
+        resp = self._session.mist_get(uri, page=page, limit=limit)
         return resp
 
     def get_stats(self, org_id, page=1, limit=100):
         uri = "/api/v1/orgs/{0}/stats/devices".format(org_id)
-        resp = self.session.mist_get(uri, page=page, limit=limit)
+        resp = self._session.mist_get(uri, page=page, limit=limit)
         return resp
 
     def search(self, org_id, search={}, page=1, limit=100):
@@ -26,7 +26,7 @@ class Devices():
         limit: Int
         """
         uri = "/api/v1/orgs/{0}/devices/search".format(org_id)
-        resp = self.session.mist_get(uri, query=search, page=page, limit=limit)
+        resp = self._session.mist_get(uri, query=search, page=page, limit=limit)
         return resp
 
     def count(self, org_id, distinct="model", page=1, limit=100):
@@ -38,7 +38,7 @@ class Devices():
         limit: Int
         """
         uri = "/api/v1/orgs/{0}/devices/count".format(org_id)
-        resp = self.session.mist_get(
+        resp = self._session.mist_get(
             uri, query={"distinct": distinct}, page=page, limit=limit)
         return resp
 
@@ -60,7 +60,7 @@ class Devices():
         limit: Int
         """
         uri = "/api/v1/orgs/{0}/devices/events/search".format(org_id)
-        resp = self.session.mist_get(uri, query=search, page=page, limit=limit)
+        resp = self._session.mist_get(uri, query=search, page=page, limit=limit)
         return resp
 
     def count_events(self, org_id, distinct="model", page=1, limit=100):
@@ -72,7 +72,7 @@ class Devices():
         limit: Int
         """
         uri = "/api/v1/orgs/{0}/devices/events/count".format(org_id)
-        resp = self.session.mist_get(
+        resp = self._session.mist_get(
             uri, query={"distinct": distinct}, page=page, limit=limit)
         return resp
 
@@ -90,6 +90,6 @@ class Devices():
             "mac": mac_old_device,
             "inventory_mac": mac_inventory_device
         }
-        resp = self.session.mist_post(
+        resp = self._session.mist_post(
             uri, body=body)
         return resp

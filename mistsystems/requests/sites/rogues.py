@@ -1,7 +1,7 @@
 class Rogues():
 
     def __init__(self, session):
-        self.session = session
+        self._session = session
 
     def get_aps(self, site_id, duration=None, rogue_type=None, page=1, limit=100):
         """
@@ -17,7 +17,7 @@ class Rogues():
         query = {}
         if duration: query["duration"]=duration
         if rogue_type: query["type"]=rogue_type
-        resp = self.session.mist_get(uri, query=query, page=page, limit=limit)
+        resp = self._session.mist_get(uri, query=query, page=page, limit=limit)
         return resp
 
     def get_clients(self, site_id, duration=None, page=1, limit=100):
@@ -32,7 +32,7 @@ class Rogues():
         uri = "/api/v1/sites/%s/insights/rogues/clients" % site_id
         query = {}
         if duration: query["duration"]=duration
-        resp = self.session.mist_get(uri, query=query, page=page, limit=limit)
+        resp = self._session.mist_get(uri, query=query, page=page, limit=limit)
         return resp
 
     def get_ap_by_id(self, site_id, rogue_bssid):
@@ -43,7 +43,7 @@ class Rogues():
             rogue_bssid: String            
         """
         uri = "/api/v1/sites/{0}/rogues/{1}".format(site_id, rogue_bssid)
-        resp = self.session.mist_get(uri)
+        resp = self._session.mist_get(uri)
         return resp
 
     def search_events(self, site_id, duration=None, rogue_type=None, page=1, limit=100):
@@ -60,7 +60,7 @@ class Rogues():
         query = {}
         if duration: query["duration"]=duration
         if rogue_type: query["type"]=rogue_type
-        resp = self.session.mist_get(uri, query=query, page=page, limit=limit)
+        resp = self._session.mist_get(uri, query=query, page=page, limit=limit)
         return resp
 
     def count_events(self, site_id, duration=None, rogue_type=None, page=1, limit=100):
@@ -77,7 +77,7 @@ class Rogues():
         query = {}
         if duration: query["duration"]=duration
         if rogue_type: query["type"]=rogue_type
-        resp = self.session.mist_get(uri, query=query, page=page, limit=limit)
+        resp = self._session.mist_get(uri, query=query, page=page, limit=limit)
         return resp
 
     
@@ -89,5 +89,5 @@ class Rogues():
             rogue_bssid: String
         """
         uri = "/api/v1/sites/{0}/rogues/{1}/deauth_clients".format(site_id, rogue_bssid)
-        resp = self.session.mist_post(uri)
+        resp = self._session.mist_post(uri)
         return resp

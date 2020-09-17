@@ -1,7 +1,7 @@
 class AssetFilters():
 
     def __init__(self, session):
-        self.session = session
+        self._session = session
         
     def create(self, site_id, assetfilter_settings):
         """
@@ -19,7 +19,7 @@ class AssetFilters():
         """
         uri = "/api/v1/sites/{0}/assetfilters".format(site_id)
         body = assetfilter_settings
-        resp = self.session.mist_post(uri, body=body)
+        resp = self._session.mist_post(uri, body=body)
         return resp
 
     def update(self, site_id, assetfilter_id, assetfilter_settings):
@@ -38,7 +38,7 @@ class AssetFilters():
                 mfg_company_id: Int (optional; ble manufacturing-specific company-id used to filter assets)
         """
         uri = "/api/v1/sites/{0}/assetfilters/{1}".format(site_id, assetfilter_id)
-        resp = self.session.mist_put(uri, body=assetfilter_settings)
+        resp = self._session.mist_put(uri, body=assetfilter_settings)
         return resp
         
     def delete(self, site_id, assetfilter_id):
@@ -49,7 +49,7 @@ class AssetFilters():
             site_id: String
             assetfilter_id: String            
         """
-        resp = self.session.mist_delete(uri)
+        resp = self._session.mist_delete(uri)
         return resp
 
     def get(self, site_id, query={}, page=1, limit=100):
@@ -62,7 +62,7 @@ class AssetFilters():
             limit: Int (maximum number of entries per request)
         """
         uri = "/api/v1/sites/{0}/assetfilters".format(site_id)
-        resp = self.session.mist_get(uri, query=query, page=page, limit=limit)
+        resp = self._session.mist_get(uri, query=query, page=page, limit=limit)
         return resp
 
 
@@ -74,5 +74,5 @@ class AssetFilters():
             assetfilter_id: String
         """
         uri = "/api/v1/sites/{0}/assetfilters/{1}".format(site_id, assetfilter_id)
-        resp = self.session.mist_get(uri)
+        resp = self._session.mist_get(uri)
         return resp

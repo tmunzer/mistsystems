@@ -1,16 +1,16 @@
 class Tickets():
 
     def __init__(self, session):
-        self.session = session
+        self._session = session
 
     def get(self, org_id, page=1, limit=100):
         uri = "/api/v1/orgs/%s/tickets" % org_id
-        resp = self.session.mist_get(uri, page=page, limit=limit)
+        resp = self._session.mist_get(uri, page=page, limit=limit)
         return resp
 
     def get_by_id(self, org_id, ticket_id):
         uri = "/api/v1/orgs/%s/tickets/%s" % (org_id, ticket_id)
-        resp = self.session.mist_get(uri)
+        resp = self._session.mist_get(uri)
         return resp
 
     def create(self, org_id, subject, ticket_type, comment):
@@ -20,12 +20,12 @@ class Tickets():
             "type": ticket_type,
             "comment": comment
         }
-        resp = self.session.mist_post(uri, body=body)
+        resp = self._session.mist_post(uri, body=body)
         return resp
 
     def add_comment(self, org_id, ticket_id, comment, file=None):
         uri = "/api/v1/orgs/{0}/tickets/{1}/comments".format(org_id, ticket_id)
-        resp = self.session.mist_post(
+        resp = self._session.mist_post(
             uri, body={"comment": comment}, files=file)
         return resp
 
@@ -35,5 +35,5 @@ class Tickets():
         if subject: body["subject"]= subject
         if ticket_type: body["type"]= ticket_type
         if status: body["status"]= status
-        resp = self.session.mist_put(uri, body=body)
+        resp = self._session.mist_put(uri, body=body)
         return resp

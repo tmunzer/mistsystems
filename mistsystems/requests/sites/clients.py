@@ -1,7 +1,7 @@
 class Wireless():
 
     def __init__(self, session):
-        self.session = session
+        self._sessionn = session
 
     def disconnect_client(self, site_id, client_mac):
         """
@@ -12,7 +12,7 @@ class Wireless():
         """
         uri = "/api/v1/sites/{0}/clients/{1}/disconnect".format(
             site_id, client_mac)
-        resp = self.session.mist_post(uri)
+        resp = self._sessionn.mist_post(uri)
         return resp
 
     def disconnect_multiple_clients(self, site_id, client_macs):
@@ -23,7 +23,7 @@ class Wireless():
             client_macs: Array
         """
         uri = "/api/v1/sites/{0}/clients/disconnect".format(site_id)
-        resp = self.session.mist_post(uri, body=client_macs)
+        resp = self._sessionn.mist_post(uri, body=client_macs)
         return resp
 
     def unauthorize_client(self, site_id, client_mac):
@@ -35,7 +35,7 @@ class Wireless():
         """
         uri = "/api/v1/sites/{0}/clients/{1}/unauthorize".format(
             site_id, client_mac)
-        resp = self.session.mist_post(uri)
+        resp = self._sessionn.mist_post(uri)
         return resp
 
     def unauthorize_multiple_clients(self, site_id, client_macs):
@@ -46,7 +46,7 @@ class Wireless():
             client_macs: Array
         """
         uri = "/api/v1/sites/{0}/clients/unauthorize".format(site_id)
-        resp = self.session.mist_post(uri, body=client_macs)
+        resp = self._sessionn.mist_post(uri, body=client_macs)
         return resp
 
     def search(self, site_id, search={}, page=1, limit=100):
@@ -66,7 +66,7 @@ class Wireless():
             limit: Int (maximum number of entries per request)
         """
         uri = "/api/v1/sites/{0}/clients/search".format(site_id)
-        resp = self.session.mist_get(uri, query=search, page=page, limit=limit)
+        resp = self._sessionn.mist_get(uri, query=search, page=page, limit=limit)
         return resp
 
     def search_client_events(self, site_id, search={}, page=1, limit=100):
@@ -83,7 +83,7 @@ class Wireless():
             limit: Int (maximum number of entries per request)
         """
         uri = "/api/v1/sites/{0}/clients/events".format(site_id)
-        resp = self.session.mist_get(uri, query=search, page=page, limit=limit)
+        resp = self._sessionn.mist_get(uri, query=search, page=page, limit=limit)
         return resp
 
     def search_client_sessions(self, site_id, search={}, page=1, limit=100):
@@ -104,7 +104,7 @@ class Wireless():
             limit: Int (maximum number of entries per request)
         """
         uri = "/api/v1/sites/{0}/clients/sessions/search".format(site_id)
-        resp = self.session.mist_get(uri, query=search, page=page, limit=limit)
+        resp = self._sessionn.mist_get(uri, query=search, page=page, limit=limit)
         return resp
 
     def count_by_distinct_attributes(self, site_id, distinct, search={}, page=1, limit=100):
@@ -127,7 +127,7 @@ class Wireless():
         uri = "/api/v1/sites/{0}/clients/count".format(site_id)
         query = search
         query["distinct"] = distinct
-        resp = self.session.mist_get(uri, query=query, page=page, limit=limit)
+        resp = self._sessionn.mist_get(uri, query=query, page=page, limit=limit)
         return resp
 
     def count_sessions_by_distinct_attributes(self, site_id, distinct, search={}, page=1, limit=100):
@@ -151,7 +151,7 @@ class Wireless():
         uri = "/api/v1/sites/{0}/clients/sessions/count".format(site_id)
         query = search
         query["distinct"] = distinct
-        resp = self.session.mist_get(uri, query=query, page=page, limit=limit)
+        resp = self._sessionn.mist_get(uri, query=query, page=page, limit=limit)
         return resp
 
     def count_events_by_distinct_attributes(self, site_id, distinct, search={}, page=1, limit=100):
@@ -171,7 +171,7 @@ class Wireless():
         uri = "/api/v1/sites/{0}/clients/events/count".format(site_id)
         query = search
         query["distinct"] = distinct
-        resp = self.session.mist_get(uri, query=query, page=page, limit=limit)
+        resp = self._sessionn.mist_get(uri, query=query, page=page, limit=limit)
         return resp
 
     def get_client_events(self, site_id, client_mac, search={}, page=1, limit=100):
@@ -190,13 +190,13 @@ class Wireless():
         """
         uri = "/api/v1/sites/{0}/clients/{1}/events".format(
             site_id, client_mac)
-        resp = self.session.mist_get(uri, query=search, page=page, limit=limit)
+        resp = self._sessionn.mist_get(uri, query=search, page=page, limit=limit)
         return resp
 
 
 class Stats():
     def __init__(self, session):
-        self.session = session
+        self._sessionn = session
 
     def get(self, site_id, page=1, limit=100):
         """
@@ -207,7 +207,7 @@ class Stats():
             limit: Int (maximum number of entries per request)
         """
         uri = "/api/v1/sites/{0}/stats/clients".format(site_id)
-        resp = self.session.mist_get(uri, page=page, limit=limit)
+        resp = self._sessionn.mist_get(uri, page=page, limit=limit)
         return resp
 
     def get_by_id(self, site_id, client_mac):
@@ -218,7 +218,7 @@ class Stats():
             client_mac: String
         """
         uri = "/api/v1/sites/{0}/stats/clients/{1}".format(site_id, client_mac)
-        resp = self.session.mist_get(uri)
+        resp = self._sessionn.mist_get(uri)
         return resp
 
     def get_on_map(self, site_id, map_id, page=1, limit=100):
@@ -232,7 +232,7 @@ class Stats():
         """
         uri = "/api/v1/sites/{0}/stats/maps/{1}/clients".format(
             site_id, map_id)
-        resp = self.session.mist_get(uri, page=page, limit=limit)
+        resp = self._sessionn.mist_get(uri, page=page, limit=limit)
         return resp
 
 
@@ -247,7 +247,7 @@ class Stats():
         """
         uri = "/api/v1/sites/{0}/stats/maps/{1}/unconnected_clients".format(
             site_id, map_id)
-        resp = self.session.mist_get(uri, page=page, limit=limit)
+        resp = self._sessionn.mist_get(uri, page=page, limit=limit)
         return resp
     def get_on_device(self, site_id, device_id, page=1, limit=100):
         """
@@ -260,13 +260,13 @@ class Stats():
         """
         uri = "/api/v1/sites/{0}/stats/devices/{1}/clients".format(
             site_id, device_id)
-        resp = self.session.mist_get(uri, page=page, limit=limit)
+        resp = self._sessionn.mist_get(uri, page=page, limit=limit)
         return resp
 
 
 class Wired():
     def __init__(self, session):
-        self.session = session
+        self._sessionn = session
 
     def search(self, site_id, search={}, page=1, limit=100):
         """
@@ -282,7 +282,7 @@ class Wired():
             limit: Int (maximum number of entries per request)
         """
         uri = "/api/v1/sites/{0}/wired_clients/search".format(site_id)
-        resp = self.session.mist_get(uri, query=search, page=page, limit=limit)
+        resp = self._sessionn.mist_get(uri, query=search, page=page, limit=limit)
         return resp
 
     def count_by_distinct_attributes(self, site_id, distinct, search={}, page=1, limit=100):
@@ -302,5 +302,5 @@ class Wired():
         uri = "/api/v1/sites/{0}/wired_clients/count".format(site_id)
         query = search
         query["distinct"] = distinct
-        resp = self.session.mist_get(uri, query=query, page=page, limit=limit)
+        resp = self._sessionn.mist_get(uri, query=query, page=page, limit=limit)
         return resp

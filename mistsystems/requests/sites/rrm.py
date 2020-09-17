@@ -1,17 +1,17 @@
 class Rrm():
 
     def __init__(self, session):
-        self.session = session
+        self._session = session
 
     def get_current_channel_planning(self, site_id):
         uri = "/api/v1/sites/%s/rrm/current" % site_id
-        resp = self.session.mist_get(uri)
+        resp = self._session.mist_get(uri)
         return resp
 
     def get_device_rrm_info(self, site_id, device_id, band):
         uri = "/api/v1/sites/%s/rrm/current/devices/%s/band/%s" % (
             site_id, device_id, band)
-        resp = self.session.mist_get(uri)
+        resp = self._session.mist_get(uri)
         return resp
 
     def optimize(self, site_id, band_24=False, band_5=False):
@@ -22,12 +22,12 @@ class Rrm():
             bands.append("5")
         body = {"bands": bands}
         uri = "/api/v1/sites/%s/rrm/optimize" % site_id
-        resp = self.session.mist_post(uri, body=body)
+        resp = self._session.mist_post(uri, body=body)
         return resp
 
     def reset(self, site_id):
         uri = "/api/v1/sites/%s/devices/reset_radio_config" % site_id
-        resp = self.session.mist_post(uri)
+        resp = self._session.mist_post(uri)
         return resp
 
     def get_events(self, site_id, band, duration="", page=1, limit=100):
@@ -35,7 +35,7 @@ class Rrm():
         query = {"band": band}
         if duration != "":
             query["duration"] = duration
-        resp = self.session.mist_get(uri, query=query, page=page, limit=limit)
+        resp = self._session.mist_get(uri, query=query, page=page, limit=limit)
         return resp
 
     def get_interference_events(self, site_id, duration="", page=1, limit=100):
@@ -43,7 +43,7 @@ class Rrm():
         query = {}
         if duration != "":
             query["duration"] = duration
-        resp = self.session.mist_get(uri, query=query, page=page, limit=limit)
+        resp = self._session.mist_get(uri, query=query, page=page, limit=limit)
         return resp
 
     def get_roaming_events(self, site_id, mtype, start="", end="", page=1, limit=100):
@@ -53,5 +53,5 @@ class Rrm():
             query["duration"] = end
         if limit != "":
             query["duration"] = limit
-        resp = self.session.mist_get(uri, query=query, page=page, limit=limit)
+        resp = self._session.mist_get(uri, query=query, page=page, limit=limit)
         return resp
